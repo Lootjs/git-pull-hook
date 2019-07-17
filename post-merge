@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# MIT © Sindre Sorhus - sindresorhus.com
+# Laravel fork by Loot.jpg
+
+# Run `chmod +x post-merge`
+
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+
+check_and_run() {
+    echo "$changed_files" | grep --quiet "$1" && eval "$2"
+}
+
+check_and_message() {
+    echo "$changed_files" | grep --quiet "$1" && echo -e "$2"
+}
+
+#check_and_run composer.lock"composer install"
+#check_and_run package-lock.json "npm install"
+#check_and_run database "php artisan migrate"
+
+check_and_message composer.lock "Merge Hook: \033[1;32m composer file has been changed!\e[0m"
+check_and_message package-lock.json "Merge Hook: \033[1;33m npm file has been changed!\e[0m"
+check_and_message database "Merge Hook: \033[1;34m migrations has changes!\e[0m"
